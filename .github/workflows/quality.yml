@@ -1,0 +1,23 @@
+name: Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: |
+          node --check js/data.js
+          node --check js/app.js
+          node --check js/vehicles.js
+          node --check js/detail.js
+      - name: Check static site integrity
+        run: node scripts/check.mjs
