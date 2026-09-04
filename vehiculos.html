@@ -1,5 +1,33 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vehículos | GJ Larry Automoción</title><meta name="description" content="Vehículos publicados por GJ Larry Automoción en La Luisiana, Sevilla."><link rel="stylesheet" href="styles.css"></head><body>
-<header class="topbar scrolled"><div class="shell nav"><a class="brand" href="index.html"><span class="brand-main">GJ LARRY</span><span class="brand-sub">AUTOMOCIÓN</span></a><nav class="navlinks"><a href="vehiculos.html">Vehículos</a><a href="index.html#detailing">Detailing</a><a href="index.html#vender">Vender mi coche</a><a href="index.html#contacto">Contacto</a><a class="nav-cta" href="tel:+34651360765">Llamar</a></nav><button class="menu" aria-label="Abrir menú">≡</button></div></header>
-<div class="mobilepanel"><a href="vehiculos.html">Vehículos</a><a href="index.html#detailing">Detailing</a><a href="index.html#vender">Vender mi coche</a><a href="index.html#contacto">Contacto</a></div>
-<main><section class="pagehero"><div class="shell"><div class="hero-location">STOCK PUBLICADO</div><h1>Vehículos.</h1><p>Solo mostramos unidades que podemos asociar a publicaciones reales del negocio. Menos relleno, más claridad.</p></div></section><section class="section" style="padding-top:46px"><div class="shell"><div class="resultsbar"><span id="resultCount"></span><a class="textlink" href="https://www.instagram.com/gj_larry_automocion/" target="_blank" rel="noopener">Últimas publicaciones ↗</a></div><div class="vehicle-grid" id="allVehicles"></div><div class="catalog-cta"><div><div class="eyeline">¿No es el coche que buscas?</div><h2>Cuéntanos qué necesitas.</h2></div><a class="btn dark" href="https://wa.me/34651360765?text=Hola%2C%20estoy%20buscando%20un%20coche%20y%20quiero%20consultaros." target="_blank" rel="noopener">Hablar por WhatsApp</a></div></div></section></main>
-<footer class="footer"><div class="shell"><div class="footbottom" style="margin-top:0"><span>© 2026 GJ Larry Automoción</span><span>651 360 765 · La Luisiana</span></div></div></footer><script type="module" src="js/app.js"></script><script type="module" src="js/vehicles.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080a0c">
+  <title>Vehículos | GJ Larry Automoción</title>
+  <meta name="description" content="Consulta el stock publicado por GJ Larry Automoción en La Luisiana, Sevilla.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="inner-page">
+  <div class="utilitybar"><div class="shell utility-inner"><div class="utility-item">La Luisiana · Sevilla</div><div class="utility-actions"><a href="tel:+34651360765">651 360 765</a><a href="https://www.instagram.com/gj_larry_automocion/" target="_blank" rel="noopener">Instagram</a></div></div></div>
+  <header class="topbar topbar-solid"><div class="shell nav"><a class="brand" href="index.html"><span class="brand-mark"></span><span class="brand-copy"><strong>LARRY GJ</strong><small>AUTOMOCIÓN</small></span></a><nav class="navlinks"><a href="index.html">Inicio</a><a href="vehiculos.html">Vehículos</a><a href="index.html#financiacion">Financiación</a><a href="index.html#vender">Tasamos tu coche</a><a href="index.html#detailing">Detailing</a><a href="index.html#contacto">Contacto</a></nav><a class="nav-cta" data-wa="Hola, quiero información sobre un vehículo." target="_blank" rel="noopener">WhatsApp</a><button class="menu" type="button" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span></button></div></header>
+  <div class="mobilepanel" aria-hidden="true"><a href="index.html">Inicio</a><a href="vehiculos.html">Vehículos</a><a href="index.html#vender">Tasamos tu coche</a><a href="index.html#detailing">Detailing</a><a href="index.html#contacto">Contacto</a></div>
+
+  <main>
+    <section class="catalog-hero"><div class="shell"><p class="hero-micro">STOCK PUBLICADO · GJ LARRY AUTOMOCIÓN</p><h1>Vehículos.</h1><p>Unidades asociadas a publicaciones reales del negocio. Precio, kilómetros y equipamiento visibles desde el principio.</p></div></section>
+    <section class="catalog-section"><div class="shell">
+      <form class="catalog-filters" id="catalogFilters">
+        <label><span>Marca</span><select name="brand" id="catalogBrand"><option value="">Todas</option></select></label>
+        <label><span>Modelo</span><select name="model" id="catalogModel"><option value="">Todos</option></select></label>
+        <label><span>Combustible</span><select name="fuel" id="catalogFuel"><option value="">Todos</option></select></label>
+        <label><span>Precio máximo</span><select name="maxPrice"><option value="">Sin límite</option><option value="30000">30.000 €</option><option value="40000">40.000 €</option><option value="50000">50.000 €</option><option value="60000">60.000 €</option></select></label>
+        <label><span>Ordenar</span><select name="sort"><option value="recent">Más reciente</option><option value="price-asc">Precio: menor a mayor</option><option value="price-desc">Precio: mayor a menor</option><option value="km-asc">Menos kilómetros</option></select></label>
+        <button type="button" class="filter-reset" id="filterReset">Limpiar</button>
+      </form>
+      <div class="catalog-toolbar"><strong id="resultCount">0 vehículos</strong><a href="https://www.instagram.com/gj_larry_automocion/" target="_blank" rel="noopener">Ver publicaciones recientes ↗</a></div>
+      <div class="catalog-grid" id="allVehicles"></div>
+      <div class="no-results" id="noResults" hidden><h2>No hay unidades con esos filtros.</h2><p>Cuéntanos qué coche buscas y consultamos opciones directamente.</p><a class="btn btn-gold" data-wa="Hola, estoy buscando un coche y no lo veo en el stock. ¿Podemos hablar?" target="_blank" rel="noopener">Consultar por WhatsApp</a></div>
+      <div class="catalog-callout"><div><p class="eyeline">¿No es el coche que buscas?</p><h2>Cuéntanos qué necesitas.</h2></div><a class="btn btn-gold" data-wa="Hola, estoy buscando un coche. Me gustaría contaros qué necesito." target="_blank" rel="noopener">Hablar por WhatsApp</a></div>
+    </div></section>
+  </main>
+  <footer class="footer footer-compact"><div class="shell"><div class="footer-bottom"><span>© 2026 GJ Larry Automoción</span><span>651 360 765 · La Luisiana, Sevilla</span></div></div></footer>
+  <script type="module" src="js/app.js"></script><script type="module" src="js/vehicles.js"></script>
+</body></html>
