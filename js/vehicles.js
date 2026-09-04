@@ -1,0 +1,5 @@
+import {vehicles,euro,km} from './data.js';
+const $=(s,p=document)=>p.querySelector(s); const grid=$('#allVehicles'); const count=$('#resultCount');
+function card(v){return `<article class="vehicle-card"><a class="vehicle-image" href="vehiculo.html?slug=${v.slug}"><img loading="lazy" src="${v.image}" alt="Imagen de apoyo para ${v.brand} ${v.model}"><span class="stock-tag">EN STOCK</span></a><div class="vehicle-body"><div class="vehicle-title"><div><h3>${v.brand} ${v.model}</h3><div class="sub">${v.year} · ${v.gear} · ${v.drive}</div></div><div class="vehicle-price">${euro(v.price)}</div></div><div class="specrow"><span>${km(v.km)}</span><span>${v.fuel}</span><span>${v.power}</span></div><div class="card-actions"><a class="textlink" href="vehiculo.html?slug=${v.slug}">Ver ficha</a><a class="source-link" href="${v.sourceUrl}" target="_blank" rel="noopener">Fotos reales ↗</a></div></div></article>`}
+function render(){grid.innerHTML=vehicles.map(card).join('');count.textContent=`${vehicles.length} vehículo${vehicles.length===1?'':'s'} publicado${vehicles.length===1?'':'s'}`}
+render();
