@@ -10,7 +10,7 @@ export const vehicles = [
     power: '286 CV',
     drive: 'xDrive 4x4',
     price: 49900,
-    image: 'https://images.unsplash.com/photo-1657365595932-894b00d4af62?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=84&w=1800',
+    image: 'https://images.unsplash.com/photo-1746624971158-97e3be8fb9da?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1800',
     imageNote: 'Imagen de presentación. Las fotografías reales del vehículo están en la publicación original de GJ Larry Automoción.',
     sourceUrl: 'https://www.instagram.com/gj_larry_automocion/p/Dc3TSXFIW1q/',
     publishedAt: '2026-09-04',
