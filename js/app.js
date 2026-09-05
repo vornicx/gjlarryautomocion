@@ -1,43 +1,58 @@
-import {vehicles,business,euro,km,dateEs} from './data.js';
-const $=(s,p=document)=>p.querySelector(s), $$=(s,p=document)=>[...p.querySelectorAll(s)];
-export const wa=(text='Hola, me gustaría recibir información de GJ Larry Automoción.')=>`https://wa.me/${business.phoneRaw}?text=${encodeURIComponent(text)}`;
-
-export function vehicleCard(v,variant='featured'){
-  if(variant==='catalog') return `<article class="catalog-card" data-brand="${v.brand}" data-fuel="${v.fuel}" data-price="${v.price}">
-    <a class="catalog-image" href="vehiculo.html?slug=${v.slug}"><img loading="lazy" src="${v.image}" alt="Imagen de presentación de ${v.brand} ${v.model}"><span class="stock-tag">EN STOCK</span></a>
-    <div class="catalog-body"><h2>${v.brand} ${v.model}</h2><div class="catalog-sub">${v.year} · ${v.gear} · ${v.drive}</div><div class="catalog-specs"><span>${km(v.km)}</span><span>${v.fuel}</span><span>${v.power}</span></div><div class="catalog-price">${euro(v.price)}</div><div class="catalog-actions"><a href="vehiculo.html?slug=${v.slug}">Ver ficha →</a><a class="source" href="${v.sourceUrl}" target="_blank" rel="noopener">Fotos reales ↗</a></div></div>
-  </article>`;
-  return `<article class="featured-card" data-reveal>
-    <a class="featured-image" href="vehiculo.html?slug=${v.slug}"><img src="${v.image}" alt="Imagen de presentación de ${v.brand} ${v.model}"><span class="stock-tag">EN STOCK</span><span class="verified-tag">Publicado ${dateEs(v.publishedAt)}</span></a>
-    <div class="featured-copy"><p class="eyeline">${v.brand}</p><h3>${v.model}</h3><div class="vehicle-sub">${v.year} · ${v.gear} · ${v.drive}</div><div class="spec-list"><div><span>Kilómetros</span><strong>${km(v.km)}</strong></div><div><span>Combustible</span><strong>${v.fuel}</strong></div><div><span>Potencia</span><strong>${v.power}</strong></div><div><span>Tracción</span><strong>${v.drive}</strong></div></div><div class="featured-price">${euro(v.price)}</div><div class="featured-actions"><a class="btn btn-gold" href="vehiculo.html?slug=${v.slug}">Ver ficha</a><a class="btn btn-outline" href="${wa(`Hola, quiero información sobre el ${v.brand} ${v.model} de ${euro(v.price)}.`)}" target="_blank" rel="noopener">Consultar</a></div><div class="source-link">Fotos reales disponibles en <a href="${v.sourceUrl}" target="_blank" rel="noopener">Instagram ↗</a></div></div>
-  </article>`;
+import {vehicles,business,euro,km} from './data.js';
+const $ = (selector, parent=document) => parent.querySelector(selector);
+const $$ = (selector, parent=document) => [...parent.querySelectorAll(selector)];
+export const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export const wa = (text='Hola, me gustaría recibir información de GJ Larry Automoción.') => `https://wa.me/${business.phoneRaw}?text=${encodeURIComponent(text)}`;
+export const vehicleName = v => `${v.brand} ${v.shortModel || v.model}`;
+export const vehicleUrl = v => `vehiculo.html?slug=${encodeURIComponent(v.slug)}`;
+export function vehicleCard(v, variant='catalog') {
+  const name=escapeHTML(vehicleName(v));
+  const heading=variant==='home'?'h3':'h2';
+  const summary=v.price ? `${v.year} · ${km(v.km)} · ${v.gear}` : v.cardDescription;
+  return `<article class="vehicle-card"><a class="card-image" href="${vehicleUrl(v)}" aria-label="Ver ${name}"><img src="${v.image}" srcset="${v.image.replace('.webp','-sm.webp')} 640w, ${v.image} ${v.imageWidth || 1440}w" sizes="(max-width:760px) 100vw, (max-width:900px) 50vw, 33vw" width="${v.imageWidth||1440}" height="${v.imageHeight||1080}" loading="lazy" decoding="async" alt="${name} en GJ Larry Automoción"><span class="card-photo-count"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h5l2-2h4l2 2h5v14H3z"/><circle cx="12" cy="13" r="4"/></svg>${v.gallery.length} fotos</span></a><div class="card-body"><div class="card-kicker"><span>${escapeHTML(v.body)}</span><span>${escapeHTML(v.color)}</span></div><${heading}><a href="${vehicleUrl(v)}">${name}</a></${heading}><p class="card-description">${escapeHTML(summary)}</p><div class="card-bottom"><span class="card-price${v.price===null?' unknown':''}">${v.price===null?'Consultar precio':euro(v.price)}</span><a href="${vehicleUrl(v)}" aria-label="Ver ficha de ${name}">↗</a></div></div></article>`;
 }
-
-function header(){
-  const h=$('.topbar'),menu=$('.menu'),panel=$('.mobilepanel');
-  if(h&&!h.classList.contains('topbar-solid')){const on=()=>h.classList.toggle('scrolled',scrollY>18);on();addEventListener('scroll',on,{passive:true});}
-  menu?.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')==='true';menu.setAttribute('aria-expanded',String(!open));panel?.classList.toggle('open',!open);panel?.setAttribute('aria-hidden',String(open));});
-  $$('.mobilepanel a').forEach(a=>a.addEventListener('click',()=>{menu?.setAttribute('aria-expanded','false');panel?.classList.remove('open');panel?.setAttribute('aria-hidden','true');}));
+export function fillSelect(select, values, placeholder) {
+  if (!select) return;
+  const previous=select.value;
+  select.replaceChildren(new Option(placeholder,''), ...values.filter(Boolean).map(value=>new Option(value,value)));
+  if (values.includes(previous)) select.value=previous;
 }
-function whatsapp(){ $$('[data-wa]').forEach(a=>a.href=wa(a.dataset.wa||undefined)); }
-function featured(){
-  const grid=$('#featuredGrid'),v=vehicles[0]; if(grid)grid.innerHTML=vehicles.map(x=>vehicleCard(x)).join('');
-  const hero=$('#heroVehicle');if(hero&&v)hero.innerHTML=`<span><strong>${v.brand} ${v.model}</strong><small>${km(v.km)} · ${v.power}</small></span><span class="hero-price">${euro(v.price)}</span>`;
-  const count=$('#stockCountText');if(count)count.textContent=`${vehicles.length} ${vehicles.length===1?'unidad publicada':'unidades publicadas'}`;
+function header() {
+  const menu=$('.menu'),panel=$('#mobileMenu');
+  if(!menu||!panel)return;
+  const close = (focus=false) => { panel.hidden=true;menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Abrir menú');if(focus)menu.focus(); };
+  menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')==='true';panel.hidden=open;menu.setAttribute('aria-expanded',String(!open));menu.setAttribute('aria-label',open?'Abrir menú':'Cerrar menú');});
+  $$('#mobileMenu a').forEach(a=>a.addEventListener('click',()=>close()));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden)close(true);});
+  document.addEventListener('pointerdown',e=>{if(!panel.hidden&&!panel.contains(e.target)&&!menu.contains(e.target))close();});
+  const mq=matchMedia('(min-width:901px)');mq.addEventListener('change',e=>{if(e.matches)close();});
+  if (/\/vehiculos(?:\.html)?$/.test(location.pathname)) $$('nav a[href="vehiculos.html"]').forEach(a=>a.setAttribute('aria-current','page'));
 }
-function fillSelect(select,items){if(!select)return;items.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;select.append(o);});}
-function quick(){
-  const f=$('#quickSearch');if(!f)return;
-  fillSelect($('#brandFilter'),[...new Set(vehicles.map(v=>v.brand))]);fillSelect($('#modelFilter'),[...new Set(vehicles.map(v=>v.model))]);fillSelect($('#fuelFilter'),[...new Set(vehicles.map(v=>v.fuel))]);
-  f.addEventListener('submit',e=>{e.preventDefault();const d=new FormData(f),q=new URLSearchParams();for(const [k,v] of d.entries())if(v)q.set(k,v);location.href=`vehiculos.html${q.size?'?'+q.toString():''}`;});
+function quickSearch() {
+  const form=$('#quickSearch');if(!form)return;
+  const brand=$('#brandFilter'),model=$('#modelFilter');
+  fillSelect(brand,[...new Set(vehicles.map(v=>v.brand))],'Todas las marcas');
+  const updateModels=()=>fillSelect(model,[...new Set(vehicles.filter(v=>!brand.value||v.brand===brand.value).map(v=>v.model))],'Todos los modelos');
+  updateModels();brand.addEventListener('change',updateModels);
+  form.addEventListener('submit',e=>{e.preventDefault();const q=new URLSearchParams();for(const [k,v] of new FormData(form))if(v)q.set(k,v);location.assign(`vehiculos.html${q.size?'?'+q:''}`);});
 }
-function valuation(){
-  const dialog=$('#valuationDialog');$$('[data-open-valuation]').forEach(b=>b.addEventListener('click',()=>dialog?.showModal()));$$('[data-close-valuation]').forEach(b=>b.addEventListener('click',()=>dialog?.close()));
-  dialog?.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
-  const f=$('#sellForm');f?.addEventListener('submit',e=>{e.preventDefault();const d=new FormData(f);const msg=`Hola, quiero valorar mi coche.\nMarca y modelo: ${d.get('model')}\nAño: ${d.get('year')}\nKilómetros: ${d.get('km')}\nTeléfono: ${d.get('phone')}\nDetalles: ${d.get('message')||'-'}`;window.open(wa(msg),'_blank','noopener');});
+export function valuationMessage(data) {
+  return `Hola, quiero valorar mi coche.\nMarca y modelo: ${data.get('model').trim()}\nAño: ${data.get('year')}\nKilómetros: ${data.get('km')}\nTeléfono: ${data.get('phone').trim()}\nDetalles: ${data.get('message')?.trim()||'-'}`;
 }
-function reveal(){
-  const items=$$('[data-reveal]');if(!items.length)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches){items.forEach(el=>el.classList.add('is-visible'));return;}
-  const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target);}}),{threshold:.12});items.forEach(el=>io.observe(el));
+function valuation() {
+  const dialog=$('#valuationDialog');if(!dialog)return;
+  const form=$('#sellForm');form.elements.year.max=String(new Date().getFullYear()+1);
+  $$('[data-open-valuation]').forEach(b=>b.addEventListener('click',()=>dialog.showModal()));
+  $$('[data-close-valuation]').forEach(b=>b.addEventListener('click',()=>dialog.close()));
+  dialog.addEventListener('click',e=>{const r=dialog.getBoundingClientRect();if(e.target===dialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))dialog.close();});
+  form.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity())return;location.assign(wa(valuationMessage(new FormData(form))));});
 }
-header();whatsapp();featured();quick();valuation();requestAnimationFrame(reveal);
+function reveal() {
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
+  const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target);}}),{threshold:.1});
+  $$('[data-reveal]').forEach(el=>{if(el.getBoundingClientRect().top>innerHeight){el.classList.add('reveal-ready');io.observe(el);}});
+}
+header();quickSearch();valuation();
+$$('[data-wa]').forEach(a=>a.href=wa(a.dataset.wa||undefined));
+const featured=$('#featuredGrid');if(featured)featured.innerHTML=vehicles.slice(1,4).map(v=>vehicleCard(v,'home')).join('');
+reveal();
