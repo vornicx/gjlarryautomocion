@@ -19,8 +19,9 @@ function render(sync=false) {
   const d=new FormData(form),b=d.get('brand'),m=d.get('model'),f=d.get('fuel'),max=d.get('maxPrice')?Number(d.get('maxPrice')):null,sort=d.get('sort');
   let list=vehicles.filter(v=>(!b||v.brand===b)&&(!m||v.model===m)&&(!f||v.fuel===f)&&(max===null||(v.price!==null&&v.price<=max)));
   if(sort==='price-asc')list.sort((a,b)=>compareKnown(a,b,'price'));else if(sort==='price-desc')list.sort((a,b)=>compareKnown(a,b,'price',-1));else if(sort==='km-asc')list.sort((a,b)=>compareKnown(a,b,'km'));
-  grid.innerHTML=list.map(v=>vehicleCard(v)).join('');count.textContent=`${list.length} ${list.length===1?'vehículo':'vehículos'}`;empty.hidden=!!list.length;grid.hidden=!list.length;$('#priceFilterNote').hidden=max===null;
   if(sync){const q=new URLSearchParams();for(const [key,value] of d)if(value&&!(key==='sort'&&value==='recent'))q.set(key,value);const next=location.pathname+(q.size?'?'+q:'');if(next!==location.pathname+location.search)history.pushState(null,'',next);}
+  grid.innerHTML=list.map(v=>vehicleCard(v)).join('');count.textContent=`${list.length} ${list.length===1?'vehículo':'vehículos'}`;empty.hidden=!!list.length;grid.hidden=!list.length;$('#priceFilterNote').hidden=max===null;
+
 }
 form.addEventListener('submit',e=>e.preventDefault());
 form.addEventListener('change',e=>{if(e.target===brand)updateModels();render(true);});

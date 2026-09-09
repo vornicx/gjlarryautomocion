@@ -2382,3 +2382,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     row-gap:28px;
   }
 }
+
+/* Keep gallery gestures and modal scrolling independent of the page. */
+html:has(dialog[open]) { overflow:hidden; }
+.gallery-thumbs { position:relative; overscroll-behavior-x:contain; }
+.gallery-open, .photo-dialog-image { touch-action:pan-y pinch-zoom; }
+.share-vehicle { cursor:pointer; background:none; border:0; font:inherit; min-height:44px; }
+.share-feedback { font-size:12px; line-height:1.5; margin:0; }
+.share-feedback:empty { display:none; }
+.detail-panel-actions { flex-wrap:wrap; }
+.share-feedback { flex-basis:100%; }

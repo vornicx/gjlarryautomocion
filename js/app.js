@@ -4,7 +4,11 @@ const $$ = (selector, parent=document) => [...parent.querySelectorAll(selector)]
 export const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const wa = (text='Hola, me gustaría recibir información de GJ Larry Automoción.') => `https://wa.me/${business.phoneRaw}?text=${encodeURIComponent(text)}`;
 export const vehicleName = v => `${v.brand} ${v.shortModel || v.model}`;
-export const vehicleUrl = v => `vehiculo.html?slug=${encodeURIComponent(v.slug)}`;
+export const vehicleUrl = v => {
+  const query=new URLSearchParams({slug:v.slug});
+  if (/\/vehiculos(?:\.html)?$/.test(location.pathname) && location.search) query.set('filters',location.search.slice(1));
+  return `vehiculo.html?${query}`;
+};
 export function vehicleCard(v, variant='catalog') {
   const name=escapeHTML(vehicleName(v));
   const heading=variant==='home'?'h3':'h2';
