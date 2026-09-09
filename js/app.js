@@ -30,8 +30,9 @@ function header() {
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden)close(true);});
   panel.addEventListener('focusout',()=>queueMicrotask(()=>{if(!panel.contains(document.activeElement)&&document.activeElement!==menu)close();}));
   document.addEventListener('pointerdown',e=>{if(!panel.hidden&&!panel.contains(e.target)&&!menu.contains(e.target))close();});
-  const mq=matchMedia('(min-width:901px)');mq.addEventListener('change',e=>{if(e.matches)close();});
-  if (/\/vehiculos(?:\.html)?$/.test(location.pathname)) $$('nav a[href="vehiculos.html"]').forEach(a=>a.setAttribute('aria-current','page'));
+  const mq=matchMedia('(min-width:1101px)');mq.addEventListener('change',e=>{if(e.matches)close();});
+  const current=location.pathname.split('/').pop().replace(/\.html$/,'')||'index';
+  $$('nav a').forEach(a=>{if(a.getAttribute('href')===`${current}.html`)a.setAttribute('aria-current','page');});
 }
 function quickSearch() {
   const form=$('#quickSearch');if(!form)return;

@@ -3,7 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {vehicles,business} from '../js/data.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const pages=['index.html','vehiculos.html','vehiculo.html','404.html'];
+const pages=['financiacion.html','vende-tu-coche.html','detailing.html','conocenos.html','contacto.html','index.html','vehiculos.html','vehiculo.html','404.html'];
 const failures=[];
 function local(ref,owner){
   if(!ref||ref.startsWith('#')||/^(https?:|tel:|mailto:|data:)/i.test(ref))return;
@@ -14,6 +14,9 @@ for(const page of pages){
   if(!/<meta[^>]+name=["']viewport["']/i.test(html))failures.push(`${page}: missing viewport`);
   if(!/<title>[^<]+<\/title>/i.test(html))failures.push(`${page}: missing title`);
   if(!html.includes('class="skip-link"'))failures.push(`${page}: missing skip link`);
+  for(const nav of html.matchAll(/<nav[^>]+aria-label="Navegación (?:principal|móvil|del pie)"[^>]*>([\s\S]*?)<\/nav>/g)) {
+    if(/href="[^"]*#/.test(nav[1]))failures.push(`${page}: menu must link to dedicated pages`);
+  }
   for(const match of html.matchAll(/(?:href|src)=["']([^"']+)["']/gi))local(match[1],page);
   for(const match of html.matchAll(/srcset="([^"]+)"/gi))for(const source of match[1].split(','))local(source.trim().split(/\s+/)[0],page);
   for(const match of html.matchAll(/href="([^"]*#[^"]+)"/gi)){
