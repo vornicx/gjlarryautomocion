@@ -2537,3 +2537,9 @@ html:has(dialog[open]) { overflow:hidden; }
  .contact-circle { width:54px; height:54px; font-size:26px; }
  .detail-panel { padding-top:22px; }
 }
+/* Final visual review: readable navigation and uncropped vehicle photography. */
+.topbar .navlinks a { color:#55584e; }
+.topbar .navlinks a[aria-current="page"] { color:#34372c; }
+.home-cars .card-image img,.home-cars .vehicle-card:first-child .card-image img { aspect-ratio:4/3; }
+.reveal-ready { opacity:1; transform:none; }
+@media (prefers-reduced-motion:reduce) { .showcase-photo:hover img { transform:none; } }
