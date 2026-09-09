@@ -2392,3 +2392,15 @@ html:has(dialog[open]) { overflow:hidden; }
 .share-feedback:empty { display:none; }
 .detail-panel-actions { flex-wrap:wrap; }
 .share-feedback { flex-basis:100%; }
+
+.active-filters { display:flex; flex-wrap:wrap; gap:8px; padding-top:16px; }
+.active-filters[hidden] { display:none; }
+.filter-chip { display:inline-flex; align-items:center; min-height:44px; padding:8px 14px; border:1px solid currentColor; border-radius:2px; background:transparent; color:inherit; font:inherit; font-size:12px; cursor:pointer; overflow-wrap:anywhere; text-align:left; }
+.filter-reset:disabled { opacity:.45; cursor:default; }
+@media (hover:hover) and (pointer:fine) {
+  .filter-chip:hover { background:var(--accent); color:var(--ink); border-color:var(--accent); }
+}
+@media (prefers-reduced-motion:no-preference) {
+  .filter-chip { transition:transform 120ms cubic-bezier(.23,1,.32,1); }
+  .filter-chip:active { transform:scale(.97); }
+}

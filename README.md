@@ -12,6 +12,8 @@ Web comercial estática para el catálogo de GJ Larry Automoción, La Luisiana (
 ## Funcionalidad
 
 - Portada con fotografías reales, selección de coches, concesionario, financiación, tasación y detailing.
+- Filtros activos visibles y eliminables individualmente; volver desde una ficha conserva la búsqueda.
+- Compartir fichas mediante el menú nativo del dispositivo o copiar el enlace.
 - Catálogo con filtros dependientes de marca/modelo, combustible, presupuesto y ordenación; filtros conservados en la URL y navegación atrás/adelante.
 - Fichas con miniaturas, fotografías ampliables, navegación por teclado y gestos horizontales.
 - Tasación con validación: prepara un mensaje de WhatsApp, sin enviar ni almacenar los datos automáticamente.
@@ -36,3 +38,7 @@ Se revisaron 126 JPG distintos de la carpeta facilitada por el usuario el 05/09/
 - https://github.com/emilkowalski/skills — colección consultada en `d23d7f88a2e21c9e4b1418c7abe420f5c1052ba7`; criterios aplicables de diseño, animación y accesibilidad.
 
 Se conserva la estructura y las rutas existentes. No se incorpora seguimiento publicitario, analítica ni una base de datos. Los textos legales completos y los datos fiscales no se han inventado; deben proceder del titular del negocio.
+
+## Flujo de entrega
+
+Por indicación del propietario (09/09/2026), terminar cada cambio validado con commit y actualización de `main`, sin forzar ni sobrescribir cambios ajenos.

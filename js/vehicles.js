@@ -3,6 +3,28 @@ import {vehicleCard,fillSelect} from './app.js';
 const $=s=>document.querySelector(s);
 const form=$('#catalogFilters'),grid=$('#allVehicles'),count=$('#resultCount'),empty=$('#noResults');
 const brand=$('#catalogBrand'),model=$('#catalogModel'),fuel=$('#catalogFuel');
+const activeFilters=document.createElement('div');
+activeFilters.className='active-filters';activeFilters.setAttribute('role','group');
+activeFilters.setAttribute('aria-label','Filtros activos');activeFilters.hidden=true;
+form.after(activeFilters);
+function renderActiveFilters() {
+  activeFilters.replaceChildren();
+  for(const key of ['brand','model','fuel','maxPrice']) {
+    const field=form.elements.namedItem(key);if(!field.value)continue;
+    const label=field.selectedOptions[0].textContent;
+    const button=document.createElement('button');button.type='button';button.className='filter-chip';
+    button.textContent=label+' ×';button.setAttribute('aria-label','Quitar filtro: '+label);
+    button.addEventListener('click',()=>{
+      field.value='';
+      if(key==='brand'){model.value='';updateModels();}
+      render(true);field.focus();
+    });
+    activeFilters.append(button);
+  }
+  activeFilters.hidden=!activeFilters.childElementCount;
+  $('#filterReset').disabled=!activeFilters.childElementCount && form.elements.sort.value==='recent';
+}
+
 fillSelect(brand,[...new Set(vehicles.map(v=>v.brand))],'Todas las marcas');
 fillSelect(fuel,[...new Set(vehicles.map(v=>v.fuel).filter(Boolean))],'Todos');
 const updateModels=()=>fillSelect(model,[...new Set(vehicles.filter(v=>!brand.value||v.brand===brand.value).map(v=>v.model))],'Todos los modelos');
@@ -20,6 +42,7 @@ function render(sync=false) {
   let list=vehicles.filter(v=>(!b||v.brand===b)&&(!m||v.model===m)&&(!f||v.fuel===f)&&(max===null||(v.price!==null&&v.price<=max)));
   if(sort==='price-asc')list.sort((a,b)=>compareKnown(a,b,'price'));else if(sort==='price-desc')list.sort((a,b)=>compareKnown(a,b,'price',-1));else if(sort==='km-asc')list.sort((a,b)=>compareKnown(a,b,'km'));
   if(sync){const q=new URLSearchParams();for(const [key,value] of d)if(value&&!(key==='sort'&&value==='recent'))q.set(key,value);const next=location.pathname+(q.size?'?'+q:'');if(next!==location.pathname+location.search)history.pushState(null,'',next);}
+  renderActiveFilters();
   grid.innerHTML=list.map(v=>vehicleCard(v)).join('');count.textContent=`${list.length} ${list.length===1?'vehículo':'vehículos'}`;empty.hidden=!!list.length;grid.hidden=!list.length;$('#priceFilterNote').hidden=max===null;
 
 }

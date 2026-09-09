@@ -28,6 +28,7 @@ function header() {
   menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')==='true';panel.hidden=open;menu.setAttribute('aria-expanded',String(!open));menu.setAttribute('aria-label',open?'Abrir menú':'Cerrar menú');});
   $$('#mobileMenu a').forEach(a=>a.addEventListener('click',()=>close()));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden)close(true);});
+  panel.addEventListener('focusout',()=>queueMicrotask(()=>{if(!panel.contains(document.activeElement)&&document.activeElement!==menu)close();}));
   document.addEventListener('pointerdown',e=>{if(!panel.hidden&&!panel.contains(e.target)&&!menu.contains(e.target))close();});
   const mq=matchMedia('(min-width:901px)');mq.addEventListener('change',e=>{if(e.matches)close();});
   if (/\/vehiculos(?:\.html)?$/.test(location.pathname)) $$('nav a[href="vehiculos.html"]').forEach(a=>a.setAttribute('aria-current','page'));
@@ -49,7 +50,14 @@ function valuation() {
   $$('[data-open-valuation]').forEach(b=>b.addEventListener('click',()=>dialog.showModal()));
   $$('[data-close-valuation]').forEach(b=>b.addEventListener('click',()=>dialog.close()));
   dialog.addEventListener('click',e=>{const r=dialog.getBoundingClientRect();if(e.target===dialog&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))dialog.close();});
-  form.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity())return;location.assign(wa(valuationMessage(new FormData(form))));});
+  function validate() {
+    const {model,phone}=form.elements;
+    model.setCustomValidity(model.value.trim().length<2?'Indica la marca y el modelo de tu coche.':'');
+    const digits=phone.value.replace(/\D/g,'');
+    phone.setCustomValidity(digits.length<7||digits.length>15?'Introduce un teléfono válido con entre 7 y 15 dígitos.':'');
+  }
+  form.addEventListener('input',validate);
+  form.addEventListener('submit',e=>{e.preventDefault();validate();if(!form.reportValidity())return;location.assign(wa(valuationMessage(new FormData(form))));});
 }
 function reveal() {
   if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
