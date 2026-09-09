@@ -20,3 +20,7 @@
 - Campos a 16 px en móvil para evitar ampliación automática al escribir.
 - Sin precios de servicios, horarios, dirección postal completa ni condiciones comerciales inventadas.
 - La portada orienta; las páginas de servicio desarrollan el contenido.
+
+## Identidad GJ Larry
+
+Tomar la fachada y la exposición reales como referencia: grafito, amarillo de marca, letras de peso y coches en primer plano. Las cabeceras transmiten esa identidad; las zonas claras facilitan leer inventario, procesos y preguntas. Evitar convertir el negocio en una marca editorial neutra, una firma de lujo ajena o una web deportiva estridente. Conservar fotografía real, voz cercana y acciones comerciales concretas.

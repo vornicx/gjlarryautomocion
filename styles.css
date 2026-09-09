@@ -2613,3 +2613,59 @@ summary:focus-visible { outline:3px solid #818700; outline-offset:5px; }
 }
 .service-hero-media img,.brand-story img { height:auto; }
 .topbar .navlinks a[aria-current="page"]::after { transform:scaleX(1); background:currentColor; }
+
+/* GJ Larry identity: showroom graphite, brand yellow and confident motor typography. */
+:root { --bg:#171918; --panel:#232623; --paper:#f4f5f1; --ink:#22251f; --accent:#dce344; --soft-line:#d3d8cb; }
+.topbar { background:var(--bg); color:var(--paper); border-bottom:1px solid #373c33; }
+.topbar .brand small { color:var(--accent); }
+.topbar .brand strong { font-weight:800; }
+.topbar .navlinks a { color:#c3c8bd; }
+.topbar .navlinks a[aria-current="page"] { color:var(--accent); }
+.topbar .nav-cta { border-color:#616954; color:var(--paper); }
+.topbar .menu span { background:var(--paper); }
+.editorial-hero { background:var(--bg); color:var(--paper); }
+.hero-heading .eyeline { color:#b6beaa; }
+.editorial-index { color:var(--accent); }
+.editorial-hero h1 { font-weight:650; font-size:clamp(48px,5.9vw,88px); letter-spacing:-.055em; }
+.editorial-hero h1 em { color:var(--accent); }
+.hero-intro p { color:#b2bba7; }
+.hero-intro .text-link { border-color:#6c765d; }
+.hero-showcase { border-top:2px solid var(--accent); background:#232720; }
+.showcase-side .eyeline { color:var(--accent); }
+.showcase-side h2 { font-style:italic; font-weight:750; }
+.hero-strip { color:#aeb99e; }
+.hero-strip a { color:var(--accent); }
+.stock-search { background:#e8ebdf; border-color:#cdd5bf; }
+.section h2 { font-weight:600; }
+.card-body h2,.card-body h3 { font-weight:650; }
+.about { border-top:2px solid var(--accent); }
+.about-copy h2 { font-weight:650; }
+.about-signature strong { color:var(--accent); font-size:23px; }
+.detailing { border-left:3px solid var(--accent); }
+.contact-section { background:var(--accent); }
+.contact-heading h2 { font-weight:650; }
+.service-hero { width:100%; max-width:none; margin:0; padding-inline:max(var(--pad),calc((100vw - 1360px)/2)); background:var(--bg); color:var(--paper); border-bottom:2px solid var(--accent); }
+.service-hero h1 { font-weight:650; letter-spacing:-.05em; }
+.hero-tone { color:var(--accent); }
+.service-hero .breadcrumb { color:#afb9a1; }
+.service-hero .eyeline { color:var(--accent); }
+.service-lead { color:#b9c2ad; }
+.service-hero-media { border-bottom:3px solid var(--accent); }
+.service-page .service-process { border-top:0; }
+.service-page h2 { font-weight:600; }
+.journey-number { display:inline-block; background:var(--accent); color:var(--ink); padding:4px 9px; font-weight:700; }
+.catalog-hero { background:var(--bg); color:var(--paper); border-bottom:2px solid var(--accent); }
+.catalog-heading h1 { font-weight:650; }
+.catalog-heading h1 em { color:var(--accent); }
+.catalog-hero .eyeline { color:var(--accent); }
+.catalog-hero .breadcrumb,.catalog-heading>p { color:#b7c0ab; }
+@media (hover:hover) and (pointer:fine) {
+ .topbar .navlinks a:hover { color:var(--accent); }
+ .topbar .nav-cta:hover { background:var(--accent); color:var(--ink); border-color:var(--accent); }
+}
+@media(max-width:760px) {
+ .editorial-hero h1 { font-size:clamp(35px,8.1vw,57px); letter-spacing:-.055em; }
+ .service-hero h1 { font-size:clamp(34px,8.6vw,49px); }
+ .service-hero { padding-inline:var(--pad); }
+ .hero-strip { font-size:8px; }
+}
