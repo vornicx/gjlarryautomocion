@@ -2611,3 +2611,5 @@ summary:focus-visible { outline:3px solid #818700; outline-offset:5px; }
  .valuation-form input,.valuation-form textarea,.catalog-filters select,.search-panel select { font-size:16px; }
  .footer nav { column-gap:20px; }
 }
+.service-hero-media img,.brand-story img { height:auto; }
+.topbar .navlinks a[aria-current="page"]::after { transform:scaleX(1); background:currentColor; }
