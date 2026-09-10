@@ -33,6 +33,21 @@ export async function login(email,password){
  return result.user;
 }
 export async function logout(){try{if(session)await request('/auth/v1/logout',{method:'POST'});}finally{session=null;}}
+export async function verifyInvitation(tokenHash){
+ session=null;
+ try{
+  session=await request('/auth/v1/verify',{method:'POST',body:{token_hash:tokenHash,type:'invite'}});
+  if(!session?.access_token)throw new Error('No se pudo validar la invitación.');
+  if(!await request('/rest/v1/rpc/fleet_operator_access',{method:'POST',body:{}}))throw new Error('Esta cuenta aún no tiene permisos de gestión.');
+  return session.user;
+ }catch(error){await logout().catch(()=>{});throw error;}
+}
+export async function setInitialPassword(password){
+ if(!session)throw new Error('Vuelve a abrir tu invitación para elegir una contraseña.');
+ if(password.length<12)throw new Error('Utiliza al menos 12 caracteres.');
+ await request('/auth/v1/user',{method:'PUT',body:{password}});
+ await logout().catch(()=>{});
+}
 export async function listFleet(){return request('/rest/v1/fleet_vehicles?select=*&order=created_at.desc,id.asc');}
 export async function resolvePhotos(rows){
  const paths=[...new Set(rows.flatMap(v=>v.gallery.map(p=>p.src)).filter(p=>!p.startsWith('assets/')))];

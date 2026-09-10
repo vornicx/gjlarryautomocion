@@ -37,14 +37,24 @@ con cinco coches, filtro BMW con dos resultados y ficha con retorno a su búsque
 
 ## Activación del primer operador
 
-Pendiente elegir el correo del propietario e invitarlo desde Auth. No se han
-creado contraseñas ni enviado invitaciones. Tras verificar el usuario en Auth,
-un administrador añade su UUID a `larry_private.operators` desde SQL Editor.
+Primera cuenta autorizada: `vornic@archic.es`, creada mediante la API oficial
+de invitaciones de Supabase Auth. Su UUID ya está en `larry_private.operators`.
+La invitación se entrega por correo y contiene un token de un solo uso en el
+fragmento de la URL: no se envía al servidor web ni se guarda en el historial.
+El propietario pulsa «Activar mi acceso», el servidor verifica la invitación
+y sus permisos, y él elige su contraseña (mínimo 12 caracteres).
+El procedimiento temporal de creación de la invitación ha quedado cerrado;
+la función `fleet-owner-bootstrap` solo responde 410 y ya no ejecuta acciones.
+No se han generado contraseñas para el propietario. La confirmación de correo
+y la elección de contraseña quedan pendientes de que complete la invitación.
 No introducir la service-role key en la web. Probar el acceso completo con esa
 cuenta (incluida carga de fotos) antes de dar por terminada la entrega.
 
 ## Pendientes operativos
 
+- Tras crear Auth, el asesor informa que la protección contra contraseñas
+  filtradas no está activa. Supabase la ofrece en Pro y superiores; este proyecto
+  usa el plan gratuito. Referencia: https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection
 - Prueba visual móvil y prueba de carga real desde una cuenta autorizada.
 - Configurar el envío de recuperación de contraseña y su recorrido.
 - Limpieza programada de archivos subidos cuyo guardado se abandona o falla.

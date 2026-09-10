@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {resolvePhotos,saveVehicle,request} from '../js/fleet-api.js';
+import {resolvePhotos,saveVehicle,request,verifyInvitation,setInitialPassword} from '../js/fleet-api.js';
 
 const originalFetch=globalThis.fetch;
 const fixture={slug:'test-car-stable-id',brand:'Test',model:'Car',price:null,year:null,km:null,fuel:null,gear:null,body:null,color:null,power:null,drive:null,desc:'Ficha',equipment:[],status:'draft',gallery:[{src:'assets/images/bmw-x3-01.webp',alt:'Foto'}]};
@@ -42,5 +42,36 @@ test('authentication and rate limit messages do not expose server details',async
   await assert.rejects(request('/auth/v1/token'),/correo o la contraseña/);
   globalThis.fetch=async()=>response({},429);
   await assert.rejects(request('/auth/v1/token'),/Demasiados intentos/);
+ }finally{globalThis.fetch=originalFetch;}
+});
+test('invitation requires operator permission before allowing password setup',async()=>{
+ const calls=[];
+ globalThis.fetch=async(url,options)=>{
+  calls.push(url);
+  if(url.endsWith('/verify'))return response({access_token:'test-session',refresh_token:'test-refresh',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:'test-user',email:'owner@example.invalid'}});
+  if(url.endsWith('/fleet_operator_access'))return response(false);
+  if(url.endsWith('/logout'))return response({});
+  throw new Error('Unexpected request');
+ };
+ try{
+  await assert.rejects(verifyInvitation('test-invitation-token'),/permisos/);
+  await assert.rejects(setInitialPassword('test-password-only'),/Vuelve a abrir/);
+  assert.equal(calls.some(url=>url.endsWith('/user')),false);
+ }finally{globalThis.fetch=originalFetch;}
+});
+test('authorized invitation updates password and clears the temporary session',async()=>{
+ let changed=false;
+ globalThis.fetch=async(url,options)=>{
+  if(url.endsWith('/verify'))return response({access_token:'test-session',refresh_token:'test-refresh',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:'test-user',email:'owner@example.invalid'}});
+  if(url.endsWith('/fleet_operator_access'))return response(true);
+  if(url.endsWith('/user')){assert.equal(options.method,'PUT');assert.equal(options.headers.Authorization,'Bearer test-session');changed=true;return response({});}
+  if(url.endsWith('/logout'))return response({});
+  throw new Error('Unexpected request');
+ };
+ try{
+  await verifyInvitation('test-invitation-token');
+  await assert.rejects(setInitialPassword('short'),/12 caracteres/);
+  await setInitialPassword('test-password-only');assert.equal(changed,true);
+  await assert.rejects(setInitialPassword('test-password-only'),/Vuelve a abrir/);
  }finally{globalThis.fetch=originalFetch;}
 });
