@@ -1123,7 +1123,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   border:2px solid transparent;
   background:none;
   opacity:.6;
-  scroll-snap-align:nearest;
+  scroll-snap-align:start;
   transition:opacity 180ms ease;
 }
 .gallery-thumb img {
@@ -2668,4 +2668,16 @@ summary:focus-visible { outline:3px solid #818700; outline-offset:5px; }
  .service-hero h1 { font-size:clamp(34px,8.6vw,49px); }
  .service-hero { padding-inline:var(--pad); }
  .hero-strip { font-size:8px; }
+}
+/* Mobile hierarchy: each action gets its own space. */
+@media(max-width:600px) {
+ .hero-intro { display:block; }
+ .hero-intro p { font-size:13px; max-width:310px; margin-bottom:14px; }
+ .hero-intro .text-link { display:flex; width:100%; font-size:13px; padding-block:10px; }
+ .showcase-bottom .btn { min-height:44px; font-size:11px; }
+ .showcase-bottom small { font-size:10px; line-height:1.5; }
+ .showcase-specs div { font-size:11px; }
+ .gallery-thumbs { scroll-snap-type:x proximity; }
+ .gallery-thumb { scroll-snap-align:start; }
+ .contact-options .contact-number { display:inline-flex; min-height:44px; align-items:center; }
 }

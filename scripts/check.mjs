@@ -3,7 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {vehicles,business} from '../js/data.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const pages=['financiacion.html','vende-tu-coche.html','detailing.html','conocenos.html','contacto.html','index.html','vehiculos.html','vehiculo.html','404.html'];
+const pages=['panel.html','financiacion.html','vende-tu-coche.html','detailing.html','conocenos.html','contacto.html','index.html','vehiculos.html','vehiculo.html','404.html'];
 const failures=[];
 function local(ref,owner){
   if(!ref||ref.startsWith('#')||/^(https?:|tel:|mailto:|data:)/i.test(ref))return;
