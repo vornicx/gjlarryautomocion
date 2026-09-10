@@ -1,4 +1,5 @@
-import {vehicles,business,euro,km} from './data.js';
+import {vehicles} from './catalog-data.js';
+import {business,euro,km} from './data.js';
 const $ = (selector, parent=document) => parent.querySelector(selector);
 const $$ = (selector, parent=document) => [...parent.querySelectorAll(selector)];
 export const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -12,7 +13,7 @@ export const vehicleUrl = v => {
 export function vehicleCard(v, variant='catalog') {
   const name=escapeHTML(vehicleName(v));
   const heading=variant==='home'?'h3':'h2';
-  const summary=v.price ? `${v.year} · ${km(v.km)} · ${v.gear}` : v.cardDescription;
+  const summary=[v.year,v.km===null?null:km(v.km),v.gear].filter(Boolean).join(' · ')||v.cardDescription;
   return `<article class="vehicle-card"><a class="card-image" href="${vehicleUrl(v)}" aria-label="Ver ${name}"><img src="${v.image}" srcset="${v.image.replace('.webp','-sm.webp')} 640w, ${v.image} ${v.imageWidth || 1440}w" sizes="(max-width:760px) 100vw, (max-width:900px) 50vw, 33vw" width="${v.imageWidth||1440}" height="${v.imageHeight||1080}" loading="lazy" decoding="async" alt="${name} en GJ Larry Automoción"><span class="card-photo-count"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h5l2-2h4l2 2h5v14H3z"/><circle cx="12" cy="13" r="4"/></svg>${v.gallery.length} fotos</span></a><div class="card-body"><div class="card-kicker"><span>${escapeHTML(v.body)}</span><span>${escapeHTML(v.color)}</span></div><${heading}><a href="${vehicleUrl(v)}">${name}</a></${heading}><p class="card-description">${escapeHTML(summary)}</p><div class="card-bottom"><span class="card-price${v.price===null?' unknown':''}">${v.price===null?'Consultar precio':euro(v.price)}</span><a href="${vehicleUrl(v)}" aria-label="Ver ficha de ${name}">↗</a></div></div></article>`;
 }
 export function fillSelect(select, values, placeholder) {
@@ -72,3 +73,18 @@ header();quickSearch();valuation();
 $$('[data-wa]').forEach(a=>a.href=wa(a.dataset.wa||undefined));
 const featured=$('#featuredGrid');if(featured)featured.innerHTML=vehicles.slice(1,4).map(v=>vehicleCard(v,'home')).join('');
 reveal();
+
+const showcase=$('.hero-showcase');
+if(showcase){
+ const v=vehicles.find(v=>v.slug==='bmw-x3-xdrive-30d-m-sport-2024')||vehicles[0];
+ if(!v)showcase.hidden=true;
+ else {
+  const photo=showcase.querySelector('.showcase-photo');photo.href=vehicleUrl(v);photo.setAttribute('aria-label',`Descubrir ${vehicleName(v)}`);
+  const img=photo.querySelector('img');img.src=v.image;img.alt=vehicleName(v)+' en GJ Larry';
+  showcase.querySelector('h2').textContent=v.brand;
+  showcase.querySelector('.showcase-version').textContent=v.model;
+  const specs=showcase.querySelectorAll('dd');specs[0].textContent=v.year||'Consultar';specs[1].textContent=v.km===null?'Consultar':km(v.km);specs[2].textContent=[v.fuel,v.power].filter(Boolean).join(' · ')||'Consultar';
+  showcase.querySelector('.showcase-bottom strong').textContent=euro(v.price);
+  showcase.querySelector('.showcase-bottom a').href=vehicleUrl(v);
+ }
+}

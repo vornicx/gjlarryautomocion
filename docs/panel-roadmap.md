@@ -1,31 +1,42 @@
-# Panel GJ Larry — primera versión
+# Panel GJ Larry — conexión real
 
-## Disponible
+Proyecto Supabase: `sqniuavyijyrfigwyipw`, región eu-west-1.
 
-`/panel` es una vista previa pública, marcada como tal y excluida de indexación. Solo usa una copia en memoria del inventario ya público. Permite altas, edición, estados, fotos locales, orden de galería y confirmación de eliminación. No representa una sesión privada ni cambia el catálogo. No hay contraseña ficticia ni guardado simulado como permanente.
+## Implementado
 
-## Conexión pendiente
+- Inicio de sesión con contraseña de Supabase Auth. No hay formulario de registro.
+- Sesión solo en memoria, con renovación durante el uso; al recargar se vuelve a entrar.
+- Lista privada de operadores. Una cuenta autenticada no basta para gestionar.
+- Altas, edición, fotografías, estados y retirada reversible.
+- Guardado condicionado a versión para detectar cambios simultáneos.
+- Galería atómica dentro de la ficha, hasta 20 fotos. Imágenes optimizadas a JPEG.
+- Bucket privado; URLs de fotos firmadas durante una hora. Retirar una ficha
+  impide crear nuevos enlaces públicos, pero los ya emitidos duran hasta caducar.
+- Catálogo, portada y detalle consultan Supabase. Sin copia estática de respaldo
+  que pueda volver a mostrar vehículos retirados si falla la conexión.
+- Los cinco coches originales están migrados. Las fotos originales siguen siendo
+  assets públicos; las nuevas cargas usan Storage.
 
-Se ha preparado `database/fleet-schema.sql`: inventario validado, operadores
-autorizados, lectura pública limitada a publicados/reservados, retirada
-reversible y versionado. Es una propuesta ejecutable pendiente de aplicar y
-probar en el proyecto dedicado; todavía no activa persistencia en `/panel`.
-La API deberá condicionar cada actualización a `id` y `version`, y tratar
-cero filas devueltas como conflicto. La galería necesita su propia operación
-atómica y políticas de almacenamiento antes de activar cargas reales.
+## Validado
 
-Crear un proyecto Supabase dedicado a GJ Larry, previa elección de organización. No reutilizar Contalab ni los proyectos de otros clientes.
+`database/fleet-access-test.sql` se ejecutó y revirtió sus fixtures: lectura
+pública, denegación de borradores, escritura anónima y de no-operadores,
+edición autorizada, conflicto de versión, publicación sin fotos rechazada,
+privilegios no autoasignables y retirada reversible. Asesor de seguridad sin avisos.
 
-- Auth por invitación; sin registro público de administradores.
-- Lista privada de operadores autorizados, administrada fuera del cliente. Autenticación por sí sola no otorga permisos de edición.
-- Tabla de vehículos con validación y versión para detectar ediciones simultáneas; borradores excluidos de lectura pública.
-- Políticas RLS por operación; visitantes solo pueden leer vehículos publicados. Operadores autorizados gestionan el inventario.
-- Storage con límites, validación de imágenes y políticas de acceso. Evitar SVG ejecutable. Gestionar archivos huérfanos.
-- API de mutaciones con validación de campos permitidos, autorización, control de concurrencia y registro de cambios.
-- Confirmación de borrado identificando el vehículo; preferir retirada reversible antes del borrado definitivo.
-- Migrar el catálogo actual y sustituir la carga estática solo después de probar lectura pública, borradores privados y denegación de escritura anónima.
-- Conectar secretos mediante variables del entorno de despliegue. Nunca guardar claves privadas en el repo o en JavaScript público.
+## Activación del primer operador
 
-## Validación antes de activarlo
+Pendiente elegir el correo del propietario e invitarlo desde Auth. No se han
+creado contraseñas ni enviado invitaciones. Tras verificar el usuario en Auth,
+un administrador añade su UUID a `larry_private.operators` desde SQL Editor.
+No introducir la service-role key en la web. Probar el acceso completo con esa
+cuenta (incluida carga de fotos) antes de dar por terminada la entrega.
 
-Probar usuario anónimo, usuario autenticado sin permiso y operador autorizado, tanto en CRUD como en fotos. Probar sesiones caducadas, errores de red, guardado duplicado y dos ediciones concurrentes. Comprobar reflejo del cambio en portada, catálogo y ficha.
+## Pendientes operativos
+
+- Prueba visual móvil y prueba de carga real desde una cuenta autorizada.
+- Configurar el envío de recuperación de contraseña y su recorrido.
+- Limpieza programada de archivos subidos cuyo guardado se abandona o falla.
+  Al retirar fotos de fichas guardadas se intenta borrar el archivo no referenciado.
+- Desactivar registro público en la configuración Auth del proyecto. Aunque se
+  crease una cuenta por API, carecería de permisos de operador por RLS.

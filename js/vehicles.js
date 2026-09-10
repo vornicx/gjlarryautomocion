@@ -1,4 +1,5 @@
-import {vehicles} from './data.js';
+import {vehicles} from './catalog-data.js';
+
 import {vehicleCard,fillSelect} from './app.js';
 const $=s=>document.querySelector(s);
 const form=$('#catalogFilters'),grid=$('#allVehicles'),count=$('#resultCount'),empty=$('#noResults');

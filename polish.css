@@ -115,3 +115,6 @@ button:focus-visible,a:focus-visible,summary:focus-visible { outline:3px solid #
  .card-bottom a { transition:background-color 160ms ease,color 160ms ease; }
  .service-faq summary { transition:color 160ms ease; }
 }
+
+[hidden] { display:none !important; }
+.catalog-error { padding:24px; background:#ece7d1; color:#333; text-align:center; }

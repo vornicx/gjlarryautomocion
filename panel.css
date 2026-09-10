@@ -2,6 +2,18 @@
 @media(max-width:760px){.management-header{padding:20px}.management-header>span{display:none}.management-main{padding:22px 20px 50px}.preview-notice{display:block}.preview-notice span{display:block;margin-top:8px}.management-heading{align-items:start;flex-direction:column;padding-block:30px}.management h1{font-size:42px}.management-heading .btn{width:100%}.fleet-summary{grid-template-columns:1fr 1fr;row-gap:20px}.fleet-summary>div:nth-child(3){border:0;padding-left:0}.fleet-filters{flex-wrap:wrap;gap:14px}.fleet-filters label:first-child{flex-basis:100%}.fleet-filters label:nth-child(2){flex:1}.fleet-row{grid-template-columns:100px 1fr;gap:15px}.fleet-row>img{width:100px;height:85px}.fleet-name h2{font-size:17px}.fleet-price{grid-column:2;font-size:15px}.fleet-actions{grid-column:1/-1;display:flex;justify-content:end;gap:30px}.editor-fields{padding:22px;gap:17px}.editor-fields input,.editor-fields select,.editor-fields textarea,.fleet-filters input,.fleet-filters select{font-size:16px}.fleet-editor header{padding:22px}.fleet-editor footer{flex-wrap:wrap;padding:22px;gap:10px}.fleet-editor footer p{flex-basis:100%}.editor-photos{grid-template-columns:1fr 1fr}.fleet-editor h2{font-size:26px}}
 @media(max-width:390px){.editor-fields{grid-template-columns:1fr}.fleet-editor footer .btn{width:100%}}
 /* Keep editing decisions visible while working through a long gallery. */
+.panel-login { max-width:560px; margin:45px auto 80px; }
+.panel-login h1 { margin:22px 0; }
+.panel-login>p { color:#626958; line-height:1.7; }
+.panel-login form { display:grid; gap:22px; margin:32px 0; }
+.panel-login label { display:grid; gap:9px; font-size:13px; }
+.panel-login input { padding:15px; border:1px solid #bdc4b2; background:#fff; font-size:16px; width:100%; }
+.panel-login small { color:#626958; line-height:1.7; }
+.panel-session { display:flex; gap:12px; align-items:center; flex-wrap:wrap; padding-bottom:20px; border-bottom:1px solid #c7cebd; }
+.panel-session span { flex:1; font-size:13px; overflow-wrap:anywhere; }
+.fleet-summary { grid-template-columns:repeat(5,1fr); }
+button:disabled { cursor:wait; opacity:.6; }
+@media(max-width:760px) { .fleet-summary { grid-template-columns:1fr 1fr; } .panel-session span { flex-basis:100%; } .panel-login { margin:20px auto 45px; } }
 .management-header { position:sticky; top:0; z-index:20; border-bottom:1px solid #454d3b; }
 .management-heading .btn { min-width:200px; }
 .fleet-summary strong { font-variant-numeric:tabular-nums; }

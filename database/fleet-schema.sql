@@ -1,4 +1,4 @@
--- Prepared schema for the dedicated GJ Larry project. NOT applied yet.
+-- Applied to the dedicated GJ Larry project sqniuavyijyrfigwyipw.
 -- Run once in a transaction after project selection, then verify RLS with
 -- anonymous, non-operator and operator sessions before connecting the website.
 begin;
