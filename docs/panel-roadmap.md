@@ -6,6 +6,14 @@
 
 ## Conexión pendiente
 
+Se ha preparado `database/fleet-schema.sql`: inventario validado, operadores
+autorizados, lectura pública limitada a publicados/reservados, retirada
+reversible y versionado. Es una propuesta ejecutable pendiente de aplicar y
+probar en el proyecto dedicado; todavía no activa persistencia en `/panel`.
+La API deberá condicionar cada actualización a `id` y `version`, y tratar
+cero filas devueltas como conflicto. La galería necesita su propia operación
+atómica y políticas de almacenamiento antes de activar cargas reales.
+
 Crear un proyecto Supabase dedicado a GJ Larry, previa elección de organización. No reutilizar Contalab ni los proyectos de otros clientes.
 
 - Auth por invitación; sin registro público de administradores.
