@@ -25,7 +25,10 @@ function header() {
   const menu=$('.menu'),panel=$('#mobileMenu');
   if(!menu||!panel)return;
   const close = (focus=false) => { panel.hidden=true;menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Abrir menú');if(focus)menu.focus(); };
-  menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')==='true';panel.hidden=open;menu.setAttribute('aria-expanded',String(!open));menu.setAttribute('aria-label',open?'Abrir menú':'Cerrar menú');});
+  const positionPanel=()=>{panel.style.setProperty('--nav-bottom',`${Math.round($('.topbar').getBoundingClientRect().bottom)}px`);};
+  addEventListener('scroll',()=>{if(!panel.hidden)positionPanel();},{passive:true});
+  addEventListener('resize',()=>{if(!panel.hidden)positionPanel();},{passive:true});
+  menu.addEventListener('click',()=>{positionPanel();const open=menu.getAttribute('aria-expanded')==='true';panel.hidden=open;menu.setAttribute('aria-expanded',String(!open));menu.setAttribute('aria-label',open?'Abrir menú':'Cerrar menú');});
   $$('#mobileMenu a').forEach(a=>a.addEventListener('click',()=>close()));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden)close(true);});
   panel.addEventListener('focusout',()=>queueMicrotask(()=>{if(!panel.contains(document.activeElement)&&document.activeElement!==menu)close();}));
