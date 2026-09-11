@@ -1,4 +1,3 @@
-import {vehicles} from './catalog-data.js';
 import {business,euro,km} from './data.js';
 const $ = (selector, parent=document) => parent.querySelector(selector);
 const $$ = (selector, parent=document) => [...parent.querySelectorAll(selector)];
@@ -38,7 +37,7 @@ function header() {
   const current=location.pathname.split('/').pop().replace(/\.html$/,'')||'index';
   $$('nav a').forEach(a=>{if(a.getAttribute('href')===`${current}.html`)a.setAttribute('aria-current','page');});
 }
-function quickSearch() {
+function quickSearch(vehicles) {
   const form=$('#quickSearch');if(!form)return;
   const brand=$('#brandFilter'),model=$('#modelFilter');
   fillSelect(brand,[...new Set(vehicles.map(v=>v.brand))],'Todas las marcas');
@@ -69,22 +68,31 @@ function reveal() {
   const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target);}}),{threshold:.1});
   $$('[data-reveal]').forEach(el=>{if(el.getBoundingClientRect().top>innerHeight){el.classList.add('reveal-ready');io.observe(el);}});
 }
-header();quickSearch();valuation();
+header();valuation();
 $$('[data-wa]').forEach(a=>a.href=wa(a.dataset.wa||undefined));
-const featured=$('#featuredGrid');if(featured)featured.innerHTML=vehicles.slice(1,4).map(v=>vehicleCard(v,'home')).join('');
 reveal();
 
-const showcase=$('.hero-showcase');
-if(showcase){
- const v=vehicles.find(v=>v.slug==='bmw-x3-xdrive-30d-m-sport-2024')||vehicles[0];
- if(!v)showcase.hidden=true;
- else {
-  const photo=showcase.querySelector('.showcase-photo');photo.href=vehicleUrl(v);photo.setAttribute('aria-label',`Descubrir ${vehicleName(v)}`);
-  const img=photo.querySelector('img');img.src=v.image;img.alt=vehicleName(v)+' en GJ Larry';
-  showcase.querySelector('h2').textContent=v.brand;
-  showcase.querySelector('.showcase-version').textContent=v.model;
-  const specs=showcase.querySelectorAll('dd');specs[0].textContent=v.year||'Consultar';specs[1].textContent=v.km===null?'Consultar':km(v.km);specs[2].textContent=[v.fuel,v.power].filter(Boolean).join(' · ')||'Consultar';
-  showcase.querySelector('.showcase-bottom strong').textContent=euro(v.price);
-  showcase.querySelector('.showcase-bottom a').href=vehicleUrl(v);
+// Navigation and service pages must never wait for the inventory API.
+async function homeInventory() {
+ const {vehicles}=await import('./catalog-data.js');
+ quickSearch(vehicles);
+ const spotlight=vehicles.find(v=>v.slug==='bmw-x3-xdrive-30d-m-sport-2024')||vehicles[0];
+ const featured=$('#featuredGrid');
+ if(featured)featured.innerHTML=vehicles.filter(v=>v.id!==spotlight?.id).slice(0,3).map(v=>vehicleCard(v,'home')).join('');
+ const showcase=$('.hero-showcase');
+ if(showcase){
+  const v=spotlight;
+  if(!v)showcase.hidden=true;
+  else {
+   const photo=showcase.querySelector('.showcase-photo');photo.href=vehicleUrl(v);photo.setAttribute('aria-label',`Descubrir ${vehicleName(v)}`);
+   const img=photo.querySelector('img');img.src=v.image;img.alt=vehicleName(v)+' en GJ Larry';
+   showcase.querySelector('h2').textContent=v.brand;
+   showcase.querySelector('.showcase-version').textContent=v.model;
+   const specs=showcase.querySelectorAll('dd');specs[0].textContent=v.year||'Consultar';specs[1].textContent=v.km===null?'Consultar':km(v.km);specs[2].textContent=[v.fuel,v.power].filter(Boolean).join(' · ')||'Consultar';
+   showcase.querySelector('.showcase-bottom strong').textContent=euro(v.price);
+   showcase.querySelector('.showcase-bottom a').href=vehicleUrl(v);
+  }
  }
+
 }
+if($('#featuredGrid')||$('.hero-showcase'))homeInventory();
