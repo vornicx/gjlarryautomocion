@@ -1,12 +1,26 @@
 import {euro,km} from './data.js';
-import {login,logout,listFleet,resolvePhotos,saveVehicle,uploadPhoto,removeUnusedPhoto} from './fleet-api.js';
+import {login,logout,listFleet,resolvePhotos,saveVehicle,uploadPhoto,removeUnusedPhoto,isDemo,DEMO_EMAIL,DEMO_PASSWORD} from './panel-data.js';
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const labels={published:'En catálogo',draft:'Borrador',reserved:'Reservado',sold:'Vendido',archived:'Retirado'};
 let fleet=[],busy=false,processingPhotos=false,draftSlug=null;
 const pendingUploads=new Map(),uploadedInEditor=new Set();
 async function refresh(){fleet=await resolvePhotos(await listFleet());render();}
-$('#loginForm').addEventListener('submit',async e=>{e.preventDefault();const button=e.target.querySelector('button');button.disabled=true;$('#loginFeedback').textContent='Entrando…';try{const user=await login(e.target.elements.email.value.trim(),e.target.elements.password.value);await refresh();e.target.reset();$('#sessionEmail').textContent=user.email;$('#loginSection').hidden=true;$('#fleetWorkspace').hidden=false;}catch(error){$('#loginFeedback').textContent=error.message;}finally{button.disabled=false;}});
+async function enterPanel(email,password){
+ const form=$('#loginForm'),button=form.querySelector('button'),demoButton=$('#demoLogin');
+ button.disabled=true;demoButton.disabled=true;$('#loginFeedback').textContent='Entrando…';
+ try{
+  const user=await login(email,password);await refresh();form.reset();
+  $('#sessionEmail').textContent=isDemo()?'Modo demo · '+user.email:user.email;
+  $('#demoNotice').hidden=!isDemo();
+  $('#vehicleForm footer p').textContent=isDemo()?'Demo: los cambios solo duran durante esta visita.':'Los cambios publicados se reflejan en el catálogo.';
+  $('#loginSection').hidden=true;$('#fleetWorkspace').hidden=false;
+  $('#fleetWorkspace h1').focus();
+ }catch(error){$('#loginFeedback').textContent=error.message;}
+ finally{button.disabled=false;demoButton.disabled=false;}
+}
+$('#loginForm').addEventListener('submit',e=>{e.preventDefault();enterPanel(e.target.elements.email.value.trim(),e.target.elements.password.value);});
+$('#demoLogin').addEventListener('click',()=>enterPanel(DEMO_EMAIL,DEMO_PASSWORD));
 $('#logout').addEventListener('click',async()=>{if(dirty&&!confirm('¿Cerrar sesión y descartar los cambios?'))return;try{await logout();}catch{}finally{location.reload();}});
 $('#refreshFleet').addEventListener('click',async()=>{try{await refresh();$('#panelFeedback').textContent='Lista actualizada.';}catch(error){$('#panelFeedback').textContent=error.message;}});
 let editing=null,photos=[],pendingDelete=null,dirty=false,uploadRun=0;
@@ -88,7 +102,7 @@ form.addEventListener('submit',async e=>{
   dirty=false;editor.close();render();
   const kept=new Set(v.gallery.map(p=>p.path||p.src));
   for(const photo of old?.gallery||[]){const path=photo.path||photo.src;if(!kept.has(path))removeUnusedPhoto(path).catch(()=>{});}
-  releaseEditorFiles(true);$('#panelFeedback').textContent='Ficha guardada. Los vehículos en catálogo y reservados están visibles en la web.';
+  releaseEditorFiles(true);$('#panelFeedback').textContent=isDemo()?'Ficha guardada en la demo. La flota real no se ha modificado.':'Ficha guardada. Los vehículos en catálogo y reservados están visibles en la web.';
  }catch(error){$('#photoFeedback').textContent=error.message;$('#panelFeedback').textContent=error.message;}
  finally{busy=false;form.querySelector('.editor-fields').inert=false;submit.disabled=false;submit.textContent='Guardar cambios';}
 });

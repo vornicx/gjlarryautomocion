@@ -36,6 +36,18 @@ button:disabled { cursor:wait; opacity:.6; }
 #panelFeedback:not(:empty) { padding:16px 20px; border-left:3px solid #a5af22; background:#e8eddd; font-size:13px; line-height:1.6; }
 
 /* The private entrance belongs to the same showroom as the public site. */
+.demo-access { margin-top:24px; padding:20px; border:1px solid #cad1b8; background:#f3f5e9; }
+.demo-access h3 { font-size:17px; margin:0 0 6px; letter-spacing:-.02em; }
+.demo-access p { margin:0; font-size:12px; color:#535b45; }
+.demo-access dl { margin:14px 0; display:grid; gap:8px; }
+.demo-access dl>div { display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 12px; }
+.demo-access dt { color:#535b45; font-size:12px; }
+.demo-access dd { margin:0; font-size:13px; font-weight:650; overflow-wrap:anywhere; user-select:all; }
+.demo-access button { width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; font-weight:600; }
+.demo-access small { display:block; font-size:11px; margin-top:12px; }
+.demo-notice { padding:18px 22px; margin-bottom:24px; border:1px solid #cad1b8; border-left:3px solid #a5af22; background:#e9eddc; }
+.demo-notice strong { font-size:14px; }
+.demo-notice p { margin:8px 0 0; font-size:13px; line-height:1.7; }
 .panel-entry { max-width:1160px; display:grid; grid-template-columns:1.08fr 1fr; margin:25px auto 45px; border:1px solid #d3d9ca; }
 .panel-entry-story { min-width:0; display:flex; flex-direction:column; justify-content:space-between; background:#171918; color:#f3f5ef; }
 .panel-entry-story>div { padding:42px 40px 32px; }

@@ -52,6 +52,21 @@ cuenta (incluida carga de fotos) antes de dar por terminada la entrega.
 
 ## Pendientes operativos
 
+### Acceso público de demostración
+
+El panel muestra `demo@gjlarry.test` / `LarryDemo2026!` y ofrece entrada directa.
+Son datos públicos de una simulación local, no una cuenta de Auth ni permisos
+de operador. `panel-data.js` selecciona explícitamente el adaptador después del
+acceso; antes de entrar, las operaciones están bloqueadas. La demo usa una copia
+de las unidades de ejemplo, guarda cambios en memoria y fotos en URLs de Blob.
+No solicita ni escribe datos en Supabase. Salir o recargar reinicia la demo.
+El acceso con cuentas reales conserva la autenticación y autorización existentes.
+
+Pruebas: altas, edición, fotos, retirada, versiones, reinicio y cero solicitudes
+de red en demo; rechazo de una cuenta normal sin autenticación del servidor.
+
+### Operación real
+
 - Tras crear Auth, el asesor informa que la protección contra contraseñas
   filtradas no está activa. Supabase la ofrece en Pro y superiores; este proyecto
   usa el plan gratuito. Referencia: https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection
